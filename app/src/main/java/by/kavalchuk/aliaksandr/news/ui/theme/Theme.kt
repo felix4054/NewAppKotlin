@@ -10,13 +10,13 @@ import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
-    primary = Blue200,
+    primary = Blue700,
     primaryVariant = Blue700,
     secondary = Teal200
 )
 
 private val LightColorPalette = lightColors(
-    primary = Blue200,
+    primary = Blue700,
     primaryVariant = Blue700,
     secondary = Teal200
 )

@@ -5,14 +5,14 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
-def versionMajor = 0
+def versionMajor = 1
 def versionMinor = 0
 def versionPatch = 1
 
 def packageName = "by.kavalchuk.aliaksandr.news"
-//def apiNewsKeyFile = rootProject.file("apikey.properties")
-//def apiNewskey = new Properties()
-//apiNewskey.load(new FileInputStream(apiNewsKeyFile))
+def apiNewsKeyFile = rootProject.file("apikey.properties")
+//def apiNewsKey = new Properties()
+//apiNewsKey.load(new FileInputStream(apiNewsKeyFile))
 
 android {
     compileSdk 32
@@ -30,19 +30,10 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+        buildConfigField 'String', 'NewsApiKey', NewsApiKey ?: 'Define the NewsApiKey in gradle.properties!'
     }
 
     buildTypes {
-
-//        debug {
-//            minifyEnabled false
-//            versionNameSuffix ".debug"
-//            buildConfigField "String", "API_BASE_URL", '"http://newsapi.org/"'
-////            buildConfigField "String", "NEWS_API_KEY", apiNewskey['NEWS_API_KEY']
-//            resValue "string", "app_version", "${defaultConfig.versionName}${versionNameSuffix}"
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.config
-//        }
 
         release {
             minifyEnabled false
@@ -157,5 +148,5 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
 
     // Coil
-    implementation 'io.coil-kt:coil-compose:1.3.2'
+    implementation 'io.coil-kt:coil-compose:2.0.0'
 }

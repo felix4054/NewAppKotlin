@@ -8,21 +8,21 @@ import com.google.gson.annotations.SerializedName
 @Entity(tableName = "table_room_article")
 data class Article(
     @SerializedName("author")
-    var author: String?,
+    var author: String? = "",
     @SerializedName("content")
-    var content: String?,
+    var content: String? = "",
     @SerializedName("description")
-    var description: String?,
+    var description: String? = "",
     @PrimaryKey
     @SerializedName("publishedAt")
-    var publishedAt: String,
+    var publishedAt: String = "",
     @SerializedName("source")
-    var source: Source?,
+    var source: Source? = null,
     @SerializedName("title")
-    var title: String?,
+    var title: String? = "",
     @SerializedName("url")
-    var url: String?,
+    var url: String? = "",
     @SerializedName("urlToImage")
-    var urlToImage: String?,
-    var isBookmark:Boolean=false
+    var urlToImage: String? = "",
+    var isBookmark:Boolean = false
 )

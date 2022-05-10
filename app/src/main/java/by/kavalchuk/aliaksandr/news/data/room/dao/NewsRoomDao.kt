@@ -9,10 +9,10 @@ import by.kavalchuk.aliaksandr.news.data.model.NewsRoom
 interface NewsRoomDao {
 
     @Query("SELECT * FROM `table_room_news`")
-    suspend fun getAppLocality(): NewsRoom
+    suspend fun getAppNewsRoom(): NewsRoom
 
     @Insert
-    suspend fun insertNewsLocality(newsLocality: NewsRoom)
+    suspend fun insertNewsRoom(newsRoom: NewsRoom)
 
 
 }

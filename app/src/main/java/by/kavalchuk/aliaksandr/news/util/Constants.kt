@@ -20,7 +20,7 @@ import java.util.*
 class Constants {
 
     companion object {
-        const val NEWS_API_KEY = "8372d71c2abe4cb4a823c35e608a575a";
+//        const val NEWS_API_KEY = "8372d71c2abe4cb4a823c35e608a575a";
         const val TIME_FORMAT_WITH_TIMEZONE = "yyyy-MM-dd'T'HH:mm:ss"
     }
 
@@ -29,6 +29,7 @@ class Constants {
         const val NEWS_DATABASE = "news_database"
         const val NOTES_TABLE = "news_table"
         //
+        const val ID = "publishedAt"
     }
 
     object Screens {
@@ -55,7 +56,15 @@ fun getRelativeDateTimeString(date: Date):CharSequence {
     return prettyTime.format(date)
 }
 
+fun String?.appendMore(): CharSequence = this?.let {
+    val result = this.substringAfter("[").substringBefore(']')
+    return this.replace("[$result]", " more...")
+} ?: " more ..."
 
+fun String?.appendNull(): CharSequence = this?.let {
+    val result = this.substringAfter("[").substringBefore(']')
+    return this.replace("[$result]", " ")
+} ?: " "
 
 fun getLocation(context: Context):String{
     val tm = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
@@ -68,7 +77,7 @@ fun getDateIso(str:String):Date {
         return Date()
     }
     return try {
-        SimpleDateFormat(TIME_FORMAT_WITH_TIMEZONE, Locale.ENGLISH).parse(str)
+        SimpleDateFormat(TIME_FORMAT_WITH_TIMEZONE, Locale.ENGLISH).parse(str)!!
     }
     catch (e: ParseException) {
         e.printStackTrace()

@@ -1,5 +1,6 @@
 package by.kavalchuk.aliaksandr.news.screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,9 +15,13 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -27,12 +32,20 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import by.kavalchuk.aliaksandr.news.R
 import by.kavalchuk.aliaksandr.news.data.model.Article
-import by.kavalchuk.aliaksandr.news.util.getDateIso
-import by.kavalchuk.aliaksandr.news.util.getRelativeDateTimeString
+import by.kavalchuk.aliaksandr.news.navigation.Screen
+import by.kavalchuk.aliaksandr.news.util.*
 import by.kavalchuk.aliaksandr.news.viewmodel.NewsViewModel
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.AsyncImagePainter.State.Empty.painter
+import coil.compose.SubcomposeAsyncImage
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import timber.log.Timber
+
 
 @Composable
 fun MainScreen(
@@ -53,8 +66,8 @@ fun MainScreen(
                     modifier = Modifier
                         .padding(20.dp)
                 ) {
-                    items(allNews) { item ->
-                        NewsItem(article = item, navController = navController)
+                    items(allNews) { article ->
+                        NewsItem(article = article, navController = navController)
                     }
                 }
             }
@@ -128,48 +141,81 @@ fun SearchView(state: MutableState<TextFieldValue>) {
     )
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun NewsItem(article: Article, navController: NavController) {
-    val articleTime = getRelativeDateTimeString(getDateIso(article.publishedAt!!))
-    Timber.e("ARTICLE TIME $articleTime")
+    val articleTime = getRelativeDateTimeString(getDateIso(article.publishedAt))
+    val articleDestination = article.description.appendNull().toString()
     Card(
         elevation = 4.dp,
         modifier = Modifier
             .padding(top = 8.dp)
             .clickable {
-//                navController.navigate(Screen.Details.route + "/${item.id}")
+                navController.navigate(Screen.Details.route + "/${article.publishedAt}")
             }
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp)
+                .padding(horizontal = 8.dp)
+                .padding(top = 8.dp)
         ) {
-            Image(
-                painter = rememberImagePainter(article.urlToImage),
-                contentDescription = null,
-                modifier = Modifier.size(128.dp)
-            )
-            Column {
-                Text(
-                    text = article.description!!,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
+            Box(
+                modifier = Modifier.size(64.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                SubcomposeAsyncImage(
+                    modifier = Modifier.fillMaxWidth(),
+                    model = article.urlToImage,
+                    loading = {
+                        Box(
+                            modifier = Modifier.size(20.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    },
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null
                 )
+            }
 
-                Row {
+//            AsyncImage(
+//                modifier = Modifier.size(80.dp),
+//                model = article.urlToImage,
+//                placeholder = painterResource(R.drawable.logo),
+//                contentScale = ContentScale.Crop,
+//                contentDescription = null
+//            )
+
+            Column (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 12.dp)
+            ) {
+                Text(
+                    text = article.title!!,
+                    maxLines = 2,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Text(
+                    text = articleDestination,
+                    maxLines = 2,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Light
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 8.dp, bottom = 4.dp),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
                     Text(
-                        text = "Time: ",
-                        fontWeight = FontWeight.Bold
+                        text = articleTime.toString(),
+                        fontSize = 12.sp,
+//                        fontWeight = FontWeight.ExtraLight
                     )
-                    Text(text = articleTime.toString())
-                }
-                Row {
-                    Text(
-                        text = "Premiered: ",
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(text = article.title!!)
                 }
             }
         }

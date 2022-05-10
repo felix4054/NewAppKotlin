@@ -1,18 +1,21 @@
 package by.kavalchuk.aliaksandr.news.data.network
 
+import androidx.multidex.BuildConfig
+import by.kavalchuk.aliaksandr.news.BuildConfig.NewsApiKey
 import by.kavalchuk.aliaksandr.news.data.model.NewsRoom
 import by.kavalchuk.aliaksandr.news.data.model.NewsResponse
-import by.kavalchuk.aliaksandr.news.util.Constants.Companion.NEWS_API_KEY
 import com.google.gson.Gson
 import timber.log.Timber
 import javax.inject.Inject
 
 
+@Suppress("UNREACHABLE_CODE")
 class NewsRepository @Inject constructor(private val apiService: ApiService) : ApiRepository {
 
     override suspend fun getNewsHeadLines(
         countryCode: String
     ): ResultWrapper<NewsResponse> {
+
         return try {
             val dataResponse = apiService.loadHeadlines(countryCode)
             var newsResponse: NewsResponse? = null
@@ -64,7 +67,7 @@ class NewsRepository @Inject constructor(private val apiService: ApiService) : A
     override suspend fun getApiNewsCountries(): ResultWrapper<List<NewsRoom>> {
         return try {
             val countriesResponse =
-                apiService.getNewsApiCountries("ru&apiKey=$NEWS_API_KEY")
+                apiService.getNewsApiCountries("ru&apiKey=${NewsApiKey}")
             val countriesList: MutableList<NewsRoom> = mutableListOf()
             when {
                 countriesResponse.isSuccessful -> {
