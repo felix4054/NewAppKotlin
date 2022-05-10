@@ -6,9 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import by.kavalchuk.aliaksandr.news.navigation.NewsNavGraph
 import by.kavalchuk.aliaksandr.news.ui.theme.NewsTheme
+import by.kavalchuk.aliaksandr.news.viewmodel.NewsViewModel
 import by.kavalchuk.aliaksandr.news.viewmodel.SplashViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint

@@ -11,11 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import by.kavalchuk.aliaksandr.news.viewmodel.MainViewModel
+import by.kavalchuk.aliaksandr.news.viewmodel.NewsViewModel
 import by.kavalchuk.aliaksandr.news.ui.theme.NewsTheme
 
 @Composable
-fun DetailScreen(mainViewModel: MainViewModel, itemId: String) {
+fun DetailScreen(newsViewModel: NewsViewModel, itemId: String) {
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -37,7 +37,7 @@ fun DetailScreen(mainViewModel: MainViewModel, itemId: String) {
 fun DetailPreview() {
     NewsTheme {
         DetailScreen(
-            mainViewModel = hiltViewModel(),
+            newsViewModel = hiltViewModel(),
             itemId = "1"
         )
     }
